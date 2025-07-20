@@ -549,7 +549,7 @@ export function ReportEmailTemplate({
     <!-- Header -->
     <div class="header">
       <div class="logo-section">
-        <img src="https://progini-seo-calculator.vercel.app/logo.png" alt="Progini AI Logo" style="width: 150px; margin-bottom: 16px;">
+        <img src="https://progini-seo-calculator.vercel.app/logo.png" alt="Progini AI Logo" style="width: 100px; ">
       </div>
       <h1 class="main-title">Your SEO Opportunity Report</h1>
       <p class="subtitle">Comprehensive growth analysis for ${
