@@ -18,6 +18,7 @@ export async function POST(request: Request) {
 
     // Fetch report from database
     const report = await Report.findById(reportId);
+    console.log("Report fetched from database:", report);
 
     if (!report) {
       return NextResponse.json({ error: "Report not found" }, { status: 404 });

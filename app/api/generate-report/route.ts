@@ -9,87 +9,97 @@ import { calculateSeoOpportunity } from "@/lib/report-generator";
 
 export async function POST(request: Request) {
   try {
-    const {
-      businessType,
-      location,
-      businessUrl,
-      locationCode,
-      analysisScope,
-      customerValue,
-    } = await request.json();
+    const text = await request.text();
+    console.log("Raw Request Body:", text);
 
-    if (!businessType || !location) {
-      return NextResponse.json(
-        { error: "Business type and location are required" },
-        { status: 400 }
-      );
+    let json;
+    try {
+      json = JSON.parse(text);
+    } catch (err) {
+      console.error("JSON Parse Error:", err);
+      throw err;
     }
+    // const {
+    //   businessType,
+    //   location,
+    //   businessUrl,
+    //   locationCode,
+    //   analysisScope,
+    //   customerValue,
+    // } = await request.json();
 
-    // Step 1. Fetch local competitors or national competitors using DataForSEO
-    const scope = analysisScope || "local";
-    let competitorInfo;
-    let competitorUrls: string[] = [];
-    if (scope === "local") {
-      competitorInfo = await fetchLocalCompetitors(
-        businessType,
-        location,
-        businessUrl,
-        locationCode
-      );
-      competitorUrls = competitorInfo.competitors.map((c) => c.url);
-    } else {
-      competitorInfo = await fetchNationalCompetitors(
-        businessType,
-        businessUrl
-      );
+    // if (!businessType || !location) {
+    //   return NextResponse.json(
+    //     { error: "Business type and location are required" },
+    //     { status: 400 }
+    //   );
+    // }
 
-      competitorUrls = competitorInfo.map((c) => c.url);
-    }
+    // // Step 1. Fetch local competitors or national competitors using DataForSEO
+    // const scope = analysisScope || "local";
+    // let competitorInfo;
+    // let competitorUrls: string[] = [];
+    // if (scope === "local") {
+    //   competitorInfo = await fetchLocalCompetitors(
+    //     businessType,
+    //     location,
+    //     businessUrl,
+    //     locationCode
+    //   );
+    //   competitorUrls = competitorInfo.competitors.map((c) => c.url);
+    // } else {
+    //   competitorInfo = await fetchNationalCompetitors(
+    //     businessType,
+    //     businessUrl
+    //   );
 
-    console.log("Competitor Info:", competitorInfo);
+    //   competitorUrls = competitorInfo.map((c) => c.url);
+    // }
 
-    // Step 2. Process result and generate keywords
-    const keywords = await generateKeywords(
-      businessType,
-      location,
-      analysisScope
-    );
-    console.log("Generated keywords:", keywords);
+    // console.log("Competitor Info:", competitorInfo);
 
-    // Step 3. Fetch keyword data from DataForSEO API
-    const keywordData = await fetchKeywordData(
-      businessUrl,
-      competitorUrls.filter(Boolean), // Filter out empty strings
-      keywords,
-      analysisScope,
-      location,
-      locationCode,
-      businessType
-    );
+    // // Step 2. Process result and generate keywords
+    // const keywords = await generateKeywords(
+    //   businessType,
+    //   location,
+    //   analysisScope
+    // );
+    // console.log("Generated keywords:", keywords);
 
-    // console.log("Keyword Data:", keywordData);
+    // // Step 3. Fetch keyword data from DataForSEO API
+    // const keywordData = await fetchKeywordData(
+    //   businessUrl,
+    //   competitorUrls.filter(Boolean), // Filter out empty strings
+    //   keywords,
+    //   analysisScope,
+    //   location,
+    //   locationCode,
+    //   businessType
+    // );
 
-    // Step 4. Calculate potential traffic and revenue
-    console.log("Starting Calculating potential traffic and revenue");
-    const report = await calculateSeoOpportunity(
-      keywordData,
-      customerValue,
-      businessType,
-      analysisScope
-    );
+    // // console.log("Keyword Data:", keywordData);
 
-    // console.log("Report generated:", report);
+    // // Step 4. Calculate potential traffic and revenue
+    // console.log("Starting Calculating potential traffic and revenue");
+    // const report = await calculateSeoOpportunity(
+    //   keywordData,
+    //   customerValue,
+    //   businessType,
+    //   analysisScope
+    // );
 
-    return NextResponse.json(
-      {
-        report,
-        businessType,
-        businessUrl,
-        location,
-        competitorInfo,
-      },
-      { status: 200 }
-    );
+    // // console.log("Report generated:", report);
+
+    // return NextResponse.json(
+    //   {
+    //     report,
+    //     businessType,
+    //     businessUrl,
+    //     location,
+    //     competitorInfo,
+    //   },
+    //   { status: 200 }
+    // );
   } catch (error: any) {
     console.error("Error detecting local competitors:", error);
     return NextResponse.json(
