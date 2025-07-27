@@ -46,7 +46,7 @@ export async function POST(request: Request) {
       competitorUrls = competitorInfo.map((c) => c.url);
     }
 
-    // console.log("Competitor Info:", competitorInfo);
+    console.log("Competitor Info:", competitorInfo);
 
     // Step 2. Process result and generate keywords
     const keywords = await generateKeywords(
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       location,
       analysisScope
     );
-    // console.log("Generated keywords:", keywords);
+    console.log("Generated keywords:", keywords);
 
     // Step 3. Fetch keyword data from DataForSEO API
     const keywordData = await fetchKeywordData(
